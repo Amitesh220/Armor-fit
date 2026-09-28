@@ -1,36 +1,126 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ARMOR FIT — "Transform Sweat into Strength"
 
-## Getting Started
+A full-stack, production-grade web application for **Armor Fit Gym**, built with Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS, and MongoDB. Faithfully reproduced from the Google Stitch design system with full database integration, admin back-office management, and mobile responsiveness.
 
-First, run the development server:
+---
 
+## 🏛️ Features & Architecture
+
+### 1. Public Facing Pages
+- **Homepage (`/`)**:
+  - High-impact brutalist/monochrome aesthetic matching Google Stitch design tokens.
+  - Hero section with live CTA buttons, operating hours badge, and tagline *“Transform Sweat into Strength”*.
+  - Live statistics counter, gym amenities grid, schedule timetable, and membership tier cards with direct enquiry deep-linking.
+  - Interactive Google Maps embed and gym contact details.
+- **Enquiry Portal (`/enquire` & `/enquiry`)**:
+  - Prospective athlete intake form with validation.
+  - Selection for fitness goals, training format (Gym, CrossFit, Personal Training), preferred contact channel, and membership tier.
+  - Instant submission feedback and zero data loss fallback.
+- **Member Feedback Form (`/feedback` & `/member-feedback`)**:
+  - Dedicated facility feedback portal for active members.
+  - 5-point rating selector, feedback categories (Equipment, Cleanliness, Trainers, Classes), anonymous or identified submissions, and immediate acknowledgement.
+- **Contact & Location (`/contact`)**:
+  - Complete location details, phone, email, operating schedule, and direct Google Maps embed.
+
+### 2. Admin Back-Office Management (`/admin`)
+- **JWT Cookie-Based Security**:
+  - HTTP-only secure cookie authentication (`armor_fit_admin_token`) signed with HMAC-SHA256 (`jose`).
+  - Protected API routes and admin dashboard layout.
+- **Dashboard (`/admin/dashboard`)**:
+  - Key performance indicators: Total Enquiries, Pending Follow-ups, Total Feedback, Average Member Rating.
+  - Quick action links and real-time activity tables.
+- **Athlete Enquiries Management (`/admin/enquiries`)**:
+  - Search by athlete name, phone, or email.
+  - Filter by lifecycle stage (`NEW`, `CONTACTED`, `CONVERTED`, `CLOSED`).
+  - Inline status update dropdowns, detailed modal view, staff notes persistence, and deletion.
+- **Member Feedback Management (`/admin/feedback`)**:
+  - Filter by star rating and status (`NEW`, `REVIEWED`, `RESOLVED`).
+  - Detailed view of member concerns, internal staff notes, and resolution tracking.
+
+### 3. Dual Storage Engine (Resilient Persistence)
+- **MongoDB Native**: Connects via Mongoose to MongoDB (`MONGODB_URI`).
+- **In-Memory Zero-Config Fallback**: If MongoDB is not yet provisioned or temporarily unreachable, the application automatically falls back to an internal thread-safe in-memory store preloaded with sample data so that the website and admin dashboard continue operating seamlessly without crash.
+
+---
+
+## 🚀 Quick Start
+
+### 1. Prerequisites
+- Node.js 18+ installed
+- MongoDB (optional, for persistent local database storage)
+
+### 2. Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Configure Environment Variables
+Copy `.env.example` to `.env.local`:
+```bash
+cp .env.example .env.local
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Default credentials in `.env.local`:
+```env
+MONGODB_URI=mongodb://127.0.0.1:27017/armor_fit
+JWT_SECRET=armor_fit_production_jwt_secret_key_minimum_32_characters_random_string_local_dev
+ADMIN_EMAIL=admin@armorfit.com
+ADMIN_PASSWORD=ArmorFitStaff2025!
+ADMIN_NAME=Armor Fit Staff
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Seed the Database (Optional)
+To create the initial admin user in your MongoDB database:
+```bash
+npm run seed:admin
+```
 
-## Learn More
+### 5. Run Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-To learn more about Next.js, take a look at the following resources:
+### 6. Admin Login
+Navigate to [http://localhost:3000/admin/login](http://localhost:3000/admin/login) and sign in with:
+- **Email:** `admin@armorfit.com`
+- **Password:** `ArmorFitStaff2025!`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📦 Production Build & Deployment
 
-## Deploy on Vercel
+### Build
+```bash
+npm run build
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Run Production Server
+```bash
+npm start
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Deployment (e.g. Vercel / Railway / Docker)
+1. Push repository to GitHub or GitLab.
+2. In your hosting platform (Vercel, AWS Amplify, Railway, Render), configure the environment variables:
+   - `MONGODB_URI` (e.g., MongoDB Atlas connection string)
+   - `JWT_SECRET` (A strong 32+ character random string)
+   - `ADMIN_EMAIL` & `ADMIN_PASSWORD` (Your production admin credentials)
+   - `NEXT_PUBLIC_SITE_URL` (Your production domain, e.g., `https://armorfit.com`)
+3. Deploy! Next.js will build all pages with automatic static optimization and dynamic API route handlers.
+
+---
+
+## 🎨 Design System & Brand Identity
+- **Primary Aesthetic:** Industrial Minimalist / Heavy Monochrome
+- **Colors:**
+  - Background: `#050505` (Ultra Deep Black)
+  - Surface: `#0e1013`, `#121417`, `#181b20`
+  - Border: `#23272e`, `#2a2f38`
+  - Accent / Text: `#ffffff`, `#f4f4f5`, `#a1a1aa`, `#71717a`
+- **Typography:**
+  - Headlines: `Montserrat` (ExtraBold & Black, uppercase, tight tracking)
+  - Body: `Inter`
+  - Accents / Numbers: `Space Mono`
+- **Icons:** Material Symbols Outlined
